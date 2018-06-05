@@ -73,7 +73,7 @@ endif(FREEBSD)
 #Check Includes
 include(CheckIncludeFiles)
 include(CheckIncludeFileCXX)
-include(CheckFunctionExists)
+include(CheckFunctionExists)#不懂
 
 #put all the libs and binaries in one place
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -81,7 +81,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
-CHECK_FUNCTION_EXISTS(fallocate CEPH_HAVE_FALLOCATE)
+CHECK_FUNCTION_EXISTS(fallocate CEPH_HAVE_FALLOCATE)#检查fallocate功能是否存在，将结果返回给变量
 CHECK_FUNCTION_EXISTS(posix_fadvise HAVE_POSIX_FADVISE)
 CHECK_FUNCTION_EXISTS(posix_fallocate HAVE_POSIX_FALLOCATE)
 CHECK_FUNCTION_EXISTS(syncfs HAVE_SYS_SYNCFS)
