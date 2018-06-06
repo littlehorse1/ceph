@@ -104,7 +104,7 @@ CHECK_FUNCTION_EXISTS(pthread_rwlockattr_setkind_np HAVE_PTHREAD_RWLOCKATTR_SETK
 CHECK_FUNCTION_EXISTS(eventfd HAVE_EVENTFD)
 CHECK_FUNCTION_EXISTS(getprogname HAVE_GETPROGNAME)
 
-CHECK_INCLUDE_FILES("linux/types.h" HAVE_LINUX_TYPES_H)
+CHECK_INCLUDE_FILES("linux/types.h" HAVE_LINUX_TYPES_H)#检查头文件是否存在
 CHECK_INCLUDE_FILES("linux/version.h" HAVE_LINUX_VERSION_H)
 CHECK_INCLUDE_FILES("arpa/nameser_compat.h" HAVE_ARPA_NAMESER_COMPAT_H)
 CHECK_INCLUDE_FILES("sys/mount.h" HAVE_SYS_MOUNT_H)
@@ -120,7 +120,7 @@ CHECK_INCLUDE_FILES("valgrind/helgrind.h" HAVE_VALGRIND_HELGRIND_H)
 
 include(CheckTypeSize)
 set(CMAKE_EXTRA_INCLUDE_FILES "linux/types.h")
-CHECK_TYPE_SIZE(__be16 __BE16) 
+CHECK_TYPE_SIZE(__be16 __BE16) #检查是否存在制定的类型，返回它的大小
 CHECK_TYPE_SIZE(__be32 __BE32) 
 CHECK_TYPE_SIZE(__be64 __BE64) 
 CHECK_TYPE_SIZE(__le16 __LE16) 
@@ -137,25 +137,26 @@ CHECK_TYPE_SIZE(__s64 __S64)
 unset(CMAKE_EXTRA_INCLUDE_FILES)
 
 include(CheckSymbolExists)
-CHECK_SYMBOL_EXISTS(res_nquery "resolv.h" HAVE_RES_NQUERY)
+CHECK_SYMBOL_EXISTS(res_nquery "resolv.h" HAVE_RES_NQUERY)#检查是否存在给定的符号
 CHECK_SYMBOL_EXISTS(F_SETPIPE_SZ "linux/fcntl.h" CEPH_HAVE_SETPIPE_SZ)
 CHECK_SYMBOL_EXISTS(__func__ "" HAVE_FUNC)
 CHECK_SYMBOL_EXISTS(__PRETTY_FUNCTION__ "" HAVE_PRETTY_FUNC)
 CHECK_SYMBOL_EXISTS(getentropy "unistd.h" HAVE_GETENTROPY)
 
-include(CheckCXXSourceCompiles)
+include(CheckCXXSourceCompiles)#检查给定的c++源码是否进行了编译和运行，变量显示结果
 CHECK_CXX_SOURCE_COMPILES("
   #include <string.h>
   int main() { char x = *strerror_r(0, &x, sizeof(x)); return 0; }
   " STRERROR_R_CHAR_P)
 
-include(CheckStructHasMember)
+include(CheckStructHasMember)#CHECK_STRUCT_HAS_MEMBER(<struct> <member> <header> <variable>[LANGUAGE <language>])检查给定的结构体或者类
+	中的变量是否存在，结果返回给变量
 CHECK_STRUCT_HAS_MEMBER("struct stat" st_mtim.tv_nsec sys/stat.h
   HAVE_STAT_ST_MTIM_TV_NSEC LANGUAGE C)
 CHECK_STRUCT_HAS_MEMBER("struct stat" st_mtimespec.tv_nsec sys/stat.h
   HAVE_STAT_ST_MTIMESPEC_TV_NSEC LANGUAGE C)
 
-set(CEPH_MAN_DIR "share/man" CACHE STRING "Install location for man pages (relative to prefix).")
+set(CEPH_MAN_DIR "share/man" CACHE STRING "Install location for man pages (relative to prefix).")#设置变量的值并给它设置缓存项
 
 option(ENABLE_SHARED "build shared libraries" ON)
 if(ENABLE_SHARED)
@@ -174,7 +175,7 @@ endif()
 
 option(WITH_RDMA "Enable RDMA in async messenger" ON)
 if(WITH_RDMA)
-  find_package(rdma REQUIRED)
+  find_package(rdma REQUIRED) #required说明这个链接库是必备库，如果找不到这个链接库，则工程不能编译
   set(HAVE_RDMA ${RDMA_FOUND})
 endif(WITH_RDMA)
 
@@ -295,12 +296,12 @@ endif()
 
 option(WITH_LZ4 "LZ4 compression support" ON)
 if(WITH_LZ4)
-  find_package(LZ4 1.7 REQUIRED)
+  find_package(LZ4 1.7 REQUIRED) #1.7 可选项，表示版本
   set(HAVE_LZ4 ${LZ4_FOUND})
 endif(WITH_LZ4)
 
 #if allocator is set on command line make sure it matches below strings
-if(ALLOCATOR)
+if(ALLOCATOR) #ALLOCATOR是什么，哪来的
   if(${ALLOCATOR} MATCHES "tcmalloc(_minimal)?")
     find_package(gperftools REQUIRED)
     set(HAVE_LIBTCMALLOC ON)
@@ -397,6 +398,8 @@ if(WITH_RADOSGW)
 
 # https://curl.haxx.se/docs/install.html mentions the
 # configure flags for various ssl backends
+
+#运行一个命令，同时设置一些输出选项
   execute_process(
     COMMAND
   "sh" "-c"
@@ -466,7 +469,7 @@ if(WITH_MGR)
     STRING "minimal required version of python runtime for running mgr plugins. ")
   find_package(PythonInterp ${MGR_PYTHON_VERSION} REQUIRED)
   find_package(PythonLibs ${MGR_PYTHON_VERSION} REQUIRED)
-  set(MGR_PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE})
+  set(MGR_PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE}) #PYTHON_EXECUTABLE 变量不知道从哪来
   set(MGR_PYTHON_LIBRARIES ${PYTHON_LIBRARIES})
   set(MGR_PYTHON_VERSION_MAJOR ${PYTHON_VERSION_MAJOR})
   # Boost dependency check deferred to Boost section
@@ -492,7 +495,7 @@ option(WITH_EVENTTRACE "Event tracing support" OFF)
 
 #option for LTTng
 option(WITH_LTTNG "LTTng tracing is enabled" ON)
-if(${WITH_LTTNG})
+if(${WITH_LTTNG}) #为什么要取值
   find_package(LTTngUST REQUIRED)
   find_program(LTTNG_GEN_TP
     lttng-gen-tp)
@@ -569,7 +572,7 @@ if(WITH_UBSAN)
 endif()
 
 if(SANITIZE_FLAGS)
-  string(REPLACE ";" "," SANITIZE_FLAGS "${SANITIZE_FLAGS}")
+  string(REPLACE ";" "," SANITIZE_FLAGS "${SANITIZE_FLAGS}") #将“；”换成“，”
   set(SANITIZE_CFLAGS "-fsanitize=${SANITIZE_FLAGS} -fno-omit-frame-pointer")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZE_CFLAGS}")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZE_CFLAGS}")
@@ -639,7 +642,7 @@ endif()
 option(WITH_SELINUX "build SELinux policy" OFF)
 if(WITH_SELINUX)
   find_file(SELINUX_MAKEFILE selinux/devel/Makefile
-    PATH /usr/share)
+    PATH /usr/share)#额外的搜索路径
   if(NOT SELINUX_MAKEFILE)
     message(FATAL_ERROR "Can't find selinux's Makefile")
   endif()
